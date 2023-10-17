@@ -1,0 +1,223 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello TestController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: auto; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+
+    body{
+      overflow-x: hidden;
+      background-color:#E3F2FD;
+      
+    
+    }
+    .animated-text {
+      animation: slideIn 30s infinite;
+      
+      white-space: nowrap;
+      top: 50%;
+      left: 0;
+  }
+
+  @keyframes slideIn {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+  }
+
+
+#form_job {
+  text-align: center;
+}
+#form {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  height: auto; 
+  top: 0;
+  left: 0;
+  z-index: 5;
+  background-color: white;
+  border-radius: 5px;
+  margin-left: 25vw;
+  margin-top: 20vh;
+  padding: 30px 20px;
+}
+
+#popup{
+  background-color: grey;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  opacity: 0.5;
+  z-index: 1;
+}
+
+#croix {
+  text-align: end;
+  font-weight: bold;
+  cursor: pointer;
+  position: absolute;
+  right: 5%;
+}
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.column {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.form-group {
+    margin-bottom: 10px;
+}
+
+.form-group label {
+    vertical-align: top;
+}
+
+
+</style>
+<body>
+<div class="example-wrapper">
+    <div class="container">
+      <h1 class="animated-text">Welcome to World JOB</h1>
+    </div>
+
+
+    <!-- Navbar -->
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-secondary">
+      
+      <div class="container-fluid">
+        {% if app.user %}
+            <a class="navbar-brand" href="{{'/logout'}}"><strong>Logout</strong></a>
+        {% else %}
+            <a class="navbar-brand" href="{{'/login'}}"><strong>Login</strong></a>
+        {% endif %}
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-mdb-toggle="collapse"
+          data-mdb-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+          {% if app.user == null %}
+            <a class="nav-link active" aria-current="page" href="{{'/register'}}">Sign up</a>
+          {% else %}
+            {% if app.user.getRoles()[0] == 'ROLE_ADMIN' %}
+              <a class="nav-link active" aria-current="page" href="{{'/admin'}}">Admin</a>
+            {% else %}
+              <div class="nav-link active" id="adelete">Delete account</div>
+            {% endif %}
+          {% endif %}
+            <a class="nav-link" href="{{path('postuler')}}"><strong>Nos annonces</strong></a>
+          </div>
+        </div>
+      </div>
+    </nav>
+   
+
+
+
+
+    {% if app.user %}
+            <p class="mt-4">L'utilisateur est connecté en tant que <span class="font-weight-bold">{{ app.user.getName() }}</span></p>
+        {% else %}
+            <p class="text-danger mt-4">L'utilisateur n'est pas connecté</p>
+        {% endif %}
+
+        <div class="bg-image hover-zoom">
+            <img src="https://mdbcdn.b-cdn.net/img/new/fluid/nature/018.webp" class="w-100" />
+          </div>
+
+    <div id="form_job" style="display: none;"><br>
+        <div id="popup"></div>
+
+        <div id="form">
+            <div id="croix">X</div>
+        <form method="post" action="{{ path('deleteuser') }}" id="form_job">
+            <div class="row">
+                <div class="column">
+                    <h1>Are you sure ?</h1>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="column">
+                    <button type="submit" class="btn btn-primary">Delete</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<section class="">
+    <!-- Footer -->
+    <footer class="text-center text-white" style="background-color: #0a4275;">
+      <!-- Grid container -->
+      <div class="container p-4 pb-0">
+        <!-- Section: CTA -->
+        <section class="">
+          <p class="d-flex justify-content-center align-items-center">
+            <span class="me-3"><strong>Never give up</strong></span>
+            
+          </p>
+        </section>
+        <!-- Section: CTA -->
+      </div>
+      <!-- Grid container -->
+  
+      <!-- Copyright -->
+      <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+        © 2023 Copyright:
+        <a class="text-white" href="#">M_J Board</a>
+      </div>
+      <!-- Copyright -->
+    </footer>
+    <!-- Footer -->
+  </section>
+</body>
+
+  <script>
+    const formbutton = document.getElementById('adelete');
+
+    formbutton.addEventListener('click', () => {
+        const jobDetails = document.getElementById('form_job');
+        if (jobDetails.style.display === 'none' || jobDetails.style.display === '') {
+            jobDetails.style.display = 'block';
+        }
+    });
+
+    const croix = document.getElementById('croix');
+    croix.addEventListener('click', () => {
+        const jobDetails = document.getElementById('form_job');
+        if (jobDetails.style.display === 'block') {
+            jobDetails.style.display = 'none';
+        }
+    });
+    const popup = document.getElementById('popup');
+    popup.addEventListener('click', () => {
+        const jobDetails = document.getElementById('form_job');
+        if (jobDetails.style.display === 'block') {
+            jobDetails.style.display = 'none';
+        }
+    });
+  </script>
+
+{% endblock %}

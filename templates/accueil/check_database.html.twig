@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AccueilController!{% endblock %}
+
+{% block body %}
+    {% if isConnected %}
+    <h1>Connexion à la base de données réussie</h1>
+    {% else %}
+        <h1>Échec de la connexion à la base de données</h1>
+    {% endif %}
+{% endblock %}
+

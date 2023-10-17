@@ -1,0 +1,39 @@
+controllers:
+    resource: ../src/Controller/
+    type: attribute
+
+accueil:
+    path: /
+    controller: App\Controller\AccueilController::index
+
+postuler:
+    path: /postuler
+    controller: App\Controller\AccueilController::postuler
+
+ad:
+    path: /employeur/ad
+    controller: App\Controller\AccueilController::ad
+
+check_database:
+    path: /check-database
+    controller: App\Controller\AccueilController::checkDatabase
+
+dashboard_company:
+    path: /employeur/dashboard
+    controller: App\Controller\AccueilController::dashboardCompany
+
+delete_company:
+    path: /deleteuser
+    controller: App\Controller\AccueilController::deleteuser
+
+app_login:
+    path: /login
+    controller: App\Controller\SecurityController::login
+
+register:
+    path: /register
+    controller: App\Controller\SecurityController::register
+
+logout:
+    path: /logout
+    controller: App\Controller\SecurityController::logout

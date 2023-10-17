@@ -1,0 +1,152 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bienvenue !{% endblock %}
+
+{% block body %}
+<style>
+    header {
+
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+        background: url('https://mdbcdn.b-cdn.net/img/new/fluid/nature/012.webp') no-repeat center center fixed;
+        background-size: cover;
+        animation: slideshow 60s infinite;
+        font-family: Arial, sans-serif;
+    }
+
+    @keyframes slideshow {
+        0% {
+            background-image: url('https://mdbcdn.b-cdn.net/img/new/fluid/nature/012.webp');
+        }
+
+        30% {
+            background-image: url('https://mdbcdn.b-cdn.net/img/new/fluid/nature/011.webp');
+        }
+
+        50% {
+            background-image: url('https://mdbcdn.b-cdn.net/img/new/fluid/nature/011.webp');
+        }
+
+        75% {
+            background-image: url('https://mdbcdn.b-cdn.net/img/new/fluid/nature/015.webp');
+        }
+    }
+
+
+
+    .form-container {
+        width: 400px;
+        padding: 40px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .form-container h2 {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+
+    .form-group button {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #4caf50;
+        color: #fff;
+        font-weight: bold;
+    }
+
+    .form-group button:hover {
+        background-color: #45a049;
+    }
+
+    .navbar .nav-link {
+        color: write !important;
+        position: relative;
+        right: auto;
+        display: flex;
+        justify-content: flex-end
+    }
+</style>
+</head>
+
+<header>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark d-none d-lg-block" style="z-index: 2000;">
+        <div class="container-fluid">
+            <!-- Navbar brand -->
+            <a class="navbar-brand nav-link" href="{{ path('accueil')}}">
+                <strong>Accueil</strong>
+            </a>
+
+            <a class="navbar-brand nav-link" href="{{ path('app_login')}}">
+                <strong>Sign in</strong>
+            </a>
+            <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarExample01"
+                aria-controls="navbarExample01" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+
+        </div>
+    </nav>
+
+    <div class="form-container">
+        <h2 style="font-weight: bold;">Register</h2>
+
+        <!--Creation du formulaire-->
+        {{ form_start(form) }}
+
+
+        <div class="form-group">
+            <div>{{ form_row(form.name) }}</div>
+        </div>
+
+        <div class="form-group">
+            <div>{{ form_row(form.first_name) }}</div>
+        </div>
+
+        <div class="form-group">
+            <div>{{ form_row(form.phone_number) }}</div>
+        </div>
+
+        <div class="form-group">
+            <div>{{ form_row(form.email) }}</div>
+        </div>
+
+        <br>
+        <div class="form-group">
+            <div>{{ form_row(form.password) }}</div>
+        </div>
+
+        <div class="form-group">
+            <button type="submit">S'inscrire</button>
+        </div>
+        {{ form_end(form) }}
+    </div>
+
+</header>
+
+{% endblock %}
