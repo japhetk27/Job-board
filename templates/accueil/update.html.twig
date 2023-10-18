@@ -95,40 +95,12 @@
 
 
     <div class="container">
-        {% if app.request.attributes.get('id') is not null %}
-            <!-- La variable 'id' est présente dans l'URL -->
-            <h2 style="font-weight: bold; text-align: center;"> Edit Annonce</h2>
-        {% else %}
-            <!-- La variable 'id' n'est pas présente dans l'URL -->
-            <h2 style="font-weight: bold; text-align: center;"> Ajout Annonce</h2>
-        {% endif %}
+         
+        <h2 style="font-weight: bold; text-align: center;"> Edit Profil : {{app.user}}</h2>
+        
         <!--Creation du formulaire-->
         {{ form_start(form) }}
-        <div class="form-group">
-            {{ form_row(form.title) }}
-        </div>
-
-        <div class="form-group">
-            {{ form_row(form.description) }}
-        </div>
-
-        <div class="form-group">
-            {{ form_row(form.resume)}}
-        </div>
-
-        <div class="form-group">
-            {{ form_row(form.salary) }}
-        </div>
-
-        <div class="form-group">
-            {{ form_row(form.location) }}
-        </div>
-
-        <div class="form-group">
-            {{ form_row(form.work_schedule) }}
-        </div>
-
-        <button type="submit" class="btn btn-primary">Enregistrer</button>
+        
         {{ form_end(form) }}
     </div>
 

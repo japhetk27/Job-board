@@ -10,21 +10,37 @@ postuler:
     path: /postuler
     controller: App\Controller\AccueilController::postuler
 
+dashboard_company:
+    path: /employeur/dashboard
+    controller: App\Controller\EmployeurController::dashboardCompany
+
 ad:
     path: /employeur/ad
-    controller: App\Controller\AccueilController::ad
+    controller: App\Controller\EmployeurController::ad
+
+editad:
+    path: /employeur/ad/{id}
+    controller: App\Controller\EmployeurController::editad
+
+seeapplicants:
+    path: /employeur/seeapplicants/{id}
+    controller: App\Controller\EmployeurController::seeapplicants
+
+deletead:
+    path: /employeur/deletead/{id}
+    controller: App\Controller\EmployeurController::deletead
 
 check_database:
     path: /check-database
     controller: App\Controller\AccueilController::checkDatabase
 
-dashboard_company:
-    path: /employeur/dashboard
-    controller: App\Controller\AccueilController::dashboardCompany
-
-delete_company:
+deleteuser:
     path: /deleteuser
     controller: App\Controller\AccueilController::deleteuser
+
+updateuser:
+    path: /updateuser
+    controller: App\Controller\AccueilController::updateuser
 
 app_login:
     path: /login

@@ -5,8 +5,10 @@ namespace App\Controller;
 use App\Entity\Advertisements;
 use App\Entity\Companies;
 use App\Entity\EmailBody;
-use App\Form\AdType;
 use App\Form\EmailBodyFormType;
+use App\Form\UserUpdateType;
+use App\Form\CompaniesUpdateType;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -43,8 +45,6 @@ class AccueilController extends AbstractController
     }
 
     #[Route('/postuler', name: 'postuler')]
-
-    //ici on la fonction qui 
     public function postuler(Request $request): Response
     {
         $repository = $this->entityManager->getRepository(Advertisements::class);
@@ -75,6 +75,7 @@ class AccueilController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $emailBody->setDescription($données['email_body_form']['description']);
+            $emailBody->setPerson($this->getUser());
 
             $this->entityManager->persist($emailBody); 
             $this->entityManager->flush();
@@ -89,74 +90,44 @@ class AccueilController extends AbstractController
         ]);
     }
 
-    #[Route('/employeur/dashboard', name: 'dashboard_company')]
-    public function dashboardCompany(): Response
+    #[Route('/deleteuser', name: 'deleteuser')]
+    public function deleteuser(Request $request, TokenStorageInterface $tokenStorage): Response
     {
-        $ad = $this->getUser();
-        $ads = $this->entityManager->getRepository(Advertisements::class)->findBy(['company' => $ad->getId()]);
-
-        return $this->render('accueil/dashboard_company.html.twig', [
-            'ads' => $ads,
-        ]);
+        $user = $this->getUser();
+        $tokenStorage->setToken(null);
+        $this->entityManager->remove($user);
+        $this->entityManager->flush();
+        return $this->redirectToRoute('accueil');
     }
 
-
-    #[Route('/employeur/ad', name: 'ad')]
-    public function ad(Request $request): Response{
-
-        $advertisement = new Advertisements();
-
-        // Récupérer toutes les entreprises
+    #[Route('/updateuser', name: 'updateuser')]
+    public function updateuser(Request $request): Response
+    {
+        $user = $this->getUser();
     
-        $companies = $this->entityManager->getRepository(Companies::class)->createQueryBuilder('c')
-            ->where('c.id >= :company_Id')
-            ->setParameter('company_Id', 3)
-            ->getQuery()
-            ->getResult();
-
-        $form = $this->createForm(AdType::class, $advertisement, [
-            'companies' => $companies,
-        ]);
+        if ($user instanceof \App\Entity\People) {
+            $form = $this->createForm(UserUpdateType::class, $user, [
+                'user' => $user,
+            ]);
+            $route = 'app_accueil';
+        } elseif ($user instanceof \App\Entity\Companies) {
+            $form = $this->createForm(CompaniesUpdateType::class, $user, [
+                'user' => $user,
+            ]);
+            $route = 'dashboard_company';
+        }        
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Récupérer la date actuelle
-            $dateActuelle = new \DateTime();
-            $datemodifier = new \DateTime();
-            $advertisement->setPostedDate($dateActuelle);
-
-            // Ajouter 2 mois
-            $datemodifier->modify('+2 months');
-
-            // Attribuer la nouvelle date à expirationDate
-            $advertisement->setExpirationDate($datemodifier);
-            $ad = $this->getUser();
-            $advertisement->setCompany($ad);
-
-            $this->entityManager->persist($advertisement); // Persistez l'annonce dans la base de données
             $this->entityManager->flush();
 
-            // Redirigez vers la page d'accueil ou une autre page appropriée
-            return $this->redirectToRoute('dashboard_company');
-        }
+            return $this->redirectToRoute($route);            
 
-        return $this->render('accueil/ads.html.twig', [
+        }
+        return $this->render('accueil/update.html.twig', [
             'form' => $form->createView(),
         ]);
-
-    }
-
-    #[Route('/deleteuser', name: 'deleteuser')]
-    public function deleteuser(Request $request, Security $security): Response
-    {
-        $user = $this->getUser();
-        
-        $security->getUser()->logout();
-
-        $this->entityManager->remove($user);
-        $this->entityManager->flush();
-        return $this->redirectToRoute('accueil');
     }
 
 

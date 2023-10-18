@@ -3,7 +3,6 @@
 namespace App\Form;
 
 use App\Entity\Advertisements;
-use App\Entity\Companies;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -17,12 +16,13 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 
-class AdType extends AbstractType
+class updateFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('title', TextType::class, [
+                'data' => $options['info']->getTitle(), 
                 'label' => 'Titre',
                 'attr' => [
                     "class"=>"form-control", 
@@ -30,6 +30,7 @@ class AdType extends AbstractType
                 ]
             ])
             ->add('description', TextareaType::class, [
+                'data' => $options['info']->getDescription(),
                 'label' => 'Description',
                 'attr' => [
                     "class"=>"form-control", 
@@ -37,6 +38,7 @@ class AdType extends AbstractType
                 ]
             ])
             ->add('resume', TextType::class, [
+                'data' => $options['info']->getResume(),
                 'label' => 'Résumé',
                 'attr' => [
                     "class"=>"form-control", 
@@ -44,6 +46,7 @@ class AdType extends AbstractType
                 ]
             ])
             ->add('salary', NumberType::class, [
+                'data' => $options['info']->getSalary(),
                 'label' => 'Salaire',
                 'html5' => true,
                 'attr' => [
@@ -54,6 +57,7 @@ class AdType extends AbstractType
                 ]
             ])
             ->add('location', TextType::class, [
+                'data' => $options['info']->getLocation(),
                 'label' => 'Lieu',
                 'attr' => [
                     "class"=>"form-control", 
@@ -61,6 +65,7 @@ class AdType extends AbstractType
                 ]
             ])
             ->add('work_schedule', ChoiceType::class, [
+                'data' => $options['info']->getWorkSchedule(),
                 'label' => 'Type de travail',
                 'choices' => [
                     'Stage' => 'stage',
@@ -78,6 +83,7 @@ class AdType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Advertisements::class,
+            'info' => null,
             'companies' => null, // Add this line
         ]);
     }

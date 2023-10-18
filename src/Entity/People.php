@@ -14,7 +14,7 @@ class People implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __toString()
     {
-        return $this->getFirstName() ." - ". $this->getName();
+        return $this->getFirstName() ." ". $this->getName();
     }
 
     #[ORM\OneToMany(targetEntity:EmailBody::class, mappedBy:"person", cascade:["persist", "remove"])]
@@ -53,7 +53,7 @@ class People implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setFirstName(?string $first_name): static
     {
-        $this->first_name = $first_name;
+        $this->first_name = ucfirst($first_name);
 
         return $this;
     }
@@ -65,8 +65,7 @@ class People implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setName(?string $name): static
     {
-        $this->name = $name;
-
+        $this->name = strtoupper($name);
         return $this;
     }
 

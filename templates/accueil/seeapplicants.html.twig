@@ -1,0 +1,102 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter ad !{% endblock %}
+
+{% block body %}
+<style>
+    body {
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+        background: url('https://mdbcdn.b-cdn.net/img/new/fluid/nature/018.webp') no-repeat center center fixed;
+        background-size: cover;
+        animation: slideshow 60s infinite;
+        font-family: Arial, sans-serif;
+    }
+
+
+    h1 {
+        color: #fff;
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .navbar .nav-link {
+        color: write !important;
+        position: relative;
+        right: auto;
+        display: flex;
+        justify-content: flex-end
+    }
+.job-ad {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    padding: 20px;
+}
+
+.job-title {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.job-description {
+    margin-bottom: 20px;
+}
+</style>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark d-none d-lg-block" style="z-index: 2000;">
+        <div class="container-fluid">
+            <!-- Navbar brand -->
+            <a class="navbar-brand nav-link" href="{{ path('dashboard_company')}}">
+                <strong>Accueil</strong>
+            </a>
+
+            <a class="navbar-brand nav-link" href="{{ path('app_login')}}">
+                <strong>Sign in</strong>
+            </a>
+            <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarExample01"
+                aria-controls="navbarExample01" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+
+        </div>
+    </nav>
+
+    
+     <div class="row">
+        <h1 class="d-flex justify-content-center">My Applicants</h1>
+        <div class="col-1"></div>
+        <div class="col-10">
+        {% for ad in applicants %}
+            <div class="job-ad">
+                <div class="job-title"> Applicant by {{ ad.getPerson() }}</div>
+                <div class="job-description">
+                    {{ ad.getDescription() }}
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+        <div class="col-1"></div>
+
+    </div>
+
+    </div>
+
+
+    <footer class="text-center text-white fixed-bottom" style="background-color: #21081a;">
+
+        <!-- Copyright -->
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+            © 2023 Copyright:
+            <a class="text-white" href="#">M.J_DEV</a>
+        </div>
+        <!-- Copyright -->
+    </footer>
+
+</body>
+{% endblock %}

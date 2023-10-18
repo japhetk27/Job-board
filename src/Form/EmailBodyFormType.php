@@ -24,13 +24,14 @@ class EmailBodyFormType extends AbstractType
     }
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $user = $this->security->getUser();
-
         $builder
             ->add('description', TextareaType::class, [
                 'label' => 'Corps du mail',
             ])
             ->add('advertisements', HiddenType::class, [
+                'data' =>  null, 
+            ])
+            ->add('person', HiddenType::class, [
                 'data' =>  null, 
             ]);
     }

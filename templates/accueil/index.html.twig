@@ -45,6 +45,10 @@
   padding: 30px 20px;
 }
 
+#adelete{
+    cursor: pointer;
+}
+
 #popup{
   background-color: grey;
   width: 100%;
@@ -102,28 +106,51 @@
         {% else %}
             <a class="navbar-brand" href="{{'/login'}}"><strong>Login</strong></a>
         {% endif %}
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-mdb-toggle="collapse"
-          data-mdb-target="#navbarNavAltMarkup"
-          aria-controls="navbarNavAltMarkup"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <i class="fas fa-bars"></i>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-          <div class="navbar-nav">
+                <button
+                  class="navbar-toggler"
+                  type="button"
+                  data-mdb-toggle="collapse"
+                  data-mdb-target="#navbarNavAltMarkup"
+                  aria-controls="navbarNavAltMarkup"
+                  aria-expanded="false"
+                  aria-label="Toggle navigation"
+                >
+                  <i class="fas fa-bars"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                  <div class="navbar-nav">
+
+          <!--Ce code vérifie si l'utilisateur est connecté ou non.S'il n'est pas connecté,
+             un lien "Sign up" est affiché pour s'inscrire.-->
+
           {% if app.user == null %}
             <a class="nav-link active" aria-current="page" href="{{'/register'}}">Sign up</a>
           {% else %}
+
+          <!--Ici le code vérifie si l'utilisateur connecté a le role "ROLE_ADMIN",
+          Si c'est le cas, un lien "Admin" est affiché pour accéder à la page d'administration.-->
+
             {% if app.user.getRoles()[0] == 'ROLE_ADMIN' %}
               <a class="nav-link active" aria-current="page" href="{{'/admin'}}">Admin</a>
-            {% else %}
-              <div class="nav-link active" id="adelete">Delete account</div>
-            {% endif %}
+            
+          <!--Ici le code vérifie si l'utilisateur connecté a le rôle "ROLE_EMPLOYEUR".
+            Si c'est le cas,un lien "Dashboard" est affiché pour accéder au tableau de bord de l'employeur.-->
+              
+              {% else %}
+                {% if app.user.getRoles()[0] == 'ROLE_EMPLOYEUR' %}
+                    <a class="nav-link active" aria-current="page" href="{{ path('dashboard_company')}}">Dashboard</a>
+                {% endif %}
+
+                    <!--le lien "Update User" et l'élément "Delete account" sont affichés. 
+                      Ces éléments permettent à l'utilisateur de mettre à jour son profil 
+                      ou de supprimer son compte, respectivement.-->
+
+                    <a class="nav-link active text-warning"  href="{{path('updateuser')}}">Update User</a>
+                    <div class="nav-link active text-danger" id="adelete">Delete account</div>
+                  {% endif %}
           {% endif %}
+    
+
             <a class="nav-link" href="{{path('postuler')}}"><strong>Nos annonces</strong></a>
           </div>
         </div>
@@ -135,9 +162,9 @@
 
 
     {% if app.user %}
-            <p class="mt-4">L'utilisateur est connecté en tant que <span class="font-weight-bold">{{ app.user.getName() }}</span></p>
+            <p class="mt-4">Vous êtes connecté en tant que <span class="font-weight-bold">{{ app.user }}</span></p>
         {% else %}
-            <p class="text-danger mt-4">L'utilisateur n'est pas connecté</p>
+            <p class="text-danger mt-4">Vous n'est pas connecté</p>
         {% endif %}
 
         <div class="bg-image hover-zoom">

@@ -79,6 +79,10 @@ p{
   padding: 30px 20px;
 }
 
+#adelete{
+    cursor: pointer;
+}
+
 #popup{
   background-color: grey;
   width: 100%;
@@ -147,56 +151,66 @@ p{
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
             <a class="nav-link active" aria-current="page" href="{{path('ad')}}">Create an advertisement</a>            
-          </div>
 
-            <div class="nav-link active" id="adelete">Delete account
-            </div>
+            <a class="nav-link active text-warning"  href="{{path('updateuser')}}">Update User</a>
+
+            <div class="nav-link active text-danger" id="adelete">Delete account</div>
+          </div>
         </div>
       </div>
     </nav>
        
-    {% for ad in ads %}
-        <div class="job-ad">
-            <div class="job-title">{{ ad.getTitle() }}</div>
-            <div class="job-description">
-                {{ ad.getResume() }}
+    <div class="row">
+        <h1 class="d-flex justify-content-center">My Advertisements</h1>
+        <div class="col-1"></div>
+        <div class="col-10">
+        {% for ad in ads %}
+            <div class="job-ad">
+                <div class="job-title">{{ ad.getTitle() }}</div>
+                <div class="job-description">
+                    {{ ad.getResume() }}
+                </div>
+                <button class="learn-more-button">Learn More</button>
+                <div class="job-details" style="display: none;"><br>
+                
+                    <p> Les missions du poste </p>
+
+
+                    {{ ad.getDescription() }}
+                    
+                    <p>
+
+                    </p>
+                    <p>Salaire : {{ ad.getSalary()}} € par an</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Lieu : {{ad.getLocation()}}</p>                
+
+                    <p>Type de travail : {{ad.getWorkSchedule()}}</p>
+                    <!-- Ce lien "Edit" redirige vers une route spécifique pour éditer l'annonce en fonction de l'ID de l'annonce.-->
+                    <a href="{{ path('editad', {'id': ad.getId()}) }}" class="btn btn-primary">Edit</a>
+                    
+                    <!-- Ce lien "see applicants" redirige vers une page pour voir les candidats pour l'annonce spécifique.-->
+                    <!--Le count[loop.index0] est utilisé pour préciser le nombre de candidats pour l'annonce correspondante.-->
+                    <!--La variable count est un tableau qui contient le nombre de candidat et [loop.index0] indique à quel annonce ils correspondent.-->                    
+                    <a href="{{ path('seeapplicants', {'id': ad.getId()}) }}" class="btn btn-primary">See applicants ({{ count[loop.index0]}})</a>
+                    
+                    <!--Ce lien "Delete" redirige vers une route spécifique pour supprimer l'annonce en fonction de l'ID de l'annonce.-->
+                    <a href="{{ path('deletead', {'id': ad.getId()}) }}" class="btn btn-danger">Delete</a>
+                </div>
+
             </div>
-            <button class="learn-more-button">Learn More</button>
-            <div class="job-details" style="display: none;"><br>
             
-                <p> Les missions du poste </p>
-
-                <p>QUELLES MISSIONS ?</p>
-                Les missions du poste
-
-                Le Groupe Dômes Pharma recrute un(e) ASSISTANT(E) CONTROLE DE GESTION H/F.
-
-                Attributions et Missions Principales
-
-                Sous la supervision du Responsable Contrôle de gestion vous êtes amené à :
-                - Harmoniser et suivre des outils de reporting à l'international.
-                - Fiabiliser et suivre des outils de BI Finance.
-                - Participer aux clôtures mensuelles et trimestrielles.
-                - Participer à l'élaboration du PNL des différentes sociétés.
-                - Participer à l'élaboration du budget.
-                <p>
-
-                </p>
-                <p>Salaire : {{ ad.getSalary()}} € par an</p>
-                <p><i class="fas fa-map-marker-alt"></i> Lieu : {{ad.getLocation()}}</p>                
-
-                <p>Type de travail : {{ad.getWorkSchedule()}}</p>
-            </div>
+        {% endfor %}
         </div>
-        
-    {% endfor %}
+        <div class="col-1"></div>
+
+    </div>
 
     <div id="form_job" style="display: none;"><br>
         <div id="popup"></div>
 
         <div id="form">
             <div id="croix">X</div>
-        <form method="post" action="{{ path('logout') }}" id="form_job">
+        <form method="post" action="{{ path('deleteuser') }}" id="form_job">
             <div class="row">
                 <div class="column">
                     <h1>Are you sure ?</h1>

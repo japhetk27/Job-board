@@ -68,8 +68,7 @@ p{
   z-index: 5;
   background-color: white;
   border-radius: 5px;
-  margin-left: 25vw;
-  margin-top: 20vh;
+  margin: 5vh 25vw;
   padding: 30px 20px;
 }
 
@@ -82,6 +81,10 @@ p{
   left: 0;
   opacity: 0.5;
   z-index: 1;
+}
+
+#adelete{
+    cursor: pointer;
 }
 
 #croix {
@@ -113,23 +116,45 @@ p{
 </style>
 
 <div class="example-wrapper">
-    <nav class="navbar navbar-dark bg-dark">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="{{ path('app_login') }}">Connexion</a>
-          <form class="d-flex input-group w-auto">
-            <input
-              type="search"
-              class="form-control rounded"
-              placeholder="Search"
-              aria-label="Search"
-              aria-describedby="search-addon"
-            />
-            <span class="input-group-text text-white border-0" id="search-addon">
-              <i class="fas fa-search"></i>
-            </span>
-          </form>
+    <nav class="navbar navbar-expand-lg navbar-light bg-secondary">
+      
+      <div class="container-fluid">
+        <a class="navbar-brand" href="{{path('app_accueil')}}"><strong>Accueil</strong></a>
+        {% if app.user %}
+            <a class="navbar-brand" href="{{'/logout'}}"><strong>Logout</strong></a>
+        {% else %}
+            <a class="navbar-brand" href="{{'/login'}}"><strong>Login</strong></a>
+        {% endif %}
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-mdb-toggle="collapse"
+          data-mdb-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+          {% if app.user == null %}
+            <a class="nav-link active" aria-current="page" href="{{'/register'}}">Sign up</a>
+          {% else %}
+            {% if app.user.getRoles()[0] == 'ROLE_ADMIN' %}
+              <a class="nav-link active" aria-current="page" href="{{'/admin'}}">Admin</a>
+            {% else %}
+                {% if app.user.getRoles()[0] == 'ROLE_EMPLOYEUR' %}
+                    <a class="nav-link active" aria-current="page" href="{{path('dashboard_company')}}">Dashboard</a>
+                {% endif %}
+              <a class="nav-link active text-warning"  href="{{path('updateuser')}}">Update User</a>
+              <div class="nav-link active text-danger cursor-pointer" id="adelete">Delete account</div>
+            {% endif %}
+          {% endif %}
+          </div>
         </div>
-      </nav>
+      </div>
+    </nav>
 
 
 
@@ -148,21 +173,9 @@ p{
                
                     <p> Les missions du poste </p>
     
-                    <p>QUELLES MISSIONS ?</p>
-                    Les missions du poste
-    
-                    Le Groupe Dômes Pharma recrute un(e) ASSISTANT(E) CONTROLE DE GESTION H/F.
-    
-                    Attributions et Missions Principales
-    
-                    Sous la supervision du Responsable Contrôle de gestion vous êtes amené à :
-                    - Harmoniser et suivre des outils de reporting à l'international.
-                    - Fiabiliser et suivre des outils de BI Finance.
-                    - Participer aux clôtures mensuelles et trimestrielles.
-                    - Participer à l'élaboration du PNL des différentes sociétés.
-                    - Participer à l'élaboration du budget.
+                    <p>QUELLES MISSIONS ?</p>    
                     <p>
-    
+                        {{ ad.getDescription() }}
                     </p>
                     <p>Salaire : {{ ad.getSalary()}} € par an</p>
                     <p><i class="fas fa-map-marker-alt"></i> Lieu : {{ad.getLocation()}}</p>                
@@ -193,41 +206,60 @@ p{
 
             <div id="form">
                 <div id="croix">X</div>
-            {{ form_start(form) }}
+
                 <div class="row">
                     <div class="column">
                         <h1>Postuler</h1>
                     </div>
-                </div>
-
-                <div class="row">
-                    <div class="column">
-                        <div class="form-group">
-                            {{ form_label(form.description) }}
-                            {{ form_widget(form.description) }}
+                
+                    <div class="row">
+                        <div class="column">
+                            <div class="form-group">
+                                <label for="name">Name :</label>
+                                <input type="text" name="name" value="{{ app.user.getName() ?? null }}" disabled>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="form-group">
+                                <label for="firstname">Firstname :</label>
+                                <input type="text" name="firstname" value="{{ app.user.getFirstname() ?? null }}" disabled>
+                            </div>
                         </div>
                     </div>
-                    <div class="column">
-                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    <div class="row">
+                        <div class="column">
+                            <div class="form-group">
+                                <label for="email">Email :</label>
+                                <input type="text" name="email" value="{{ app.user.getEmail() ?? null }}" disabled>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="form-group">
+                                <label for="phone">Phone Number :</label>
+                                <input type="text" name="phone" value="{{ app.user.getPhoneNumber() ?? null }}" disabled>
+                            </div>
+                        </div>
+                    </div>
+
+                        {{ form_start(form) }}
+                            <div class="row">
+                                <div class="column">
+                                    <div class="form-group">
+                                        {{ form_label(form.description) }}
+                                        {{ form_widget(form.description) }}
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                                </div>
+                            </div>
+                        {{ form_end(form) }}
                     </div>
                 </div>
-
-            {{ form_end(form) }}
             </div>
         </div>
 
      
-        
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/test/test' }}">Test</a></code></li>
-        <li>Your controller at <code><a href="{{ '/test' }}">Test</a></code></li>
-
-        <li>Your template at <code><a href="{{ 'C:/wamp64/www/Cours EPITECH/T-WEB-501/JobBoard/templates/accueil/index.html.twig'|file_link(0) }}">templates/accueil/index.html.twig</a></code></li>
-    </ul>
-
-
-
     <script>
         // JavaScript pour gérer l'affichage des détails lors du clic sur "En savoir plus"
         const learnMoreButtons = document.querySelectorAll('.learn-more-button');
@@ -251,7 +283,7 @@ p{
                 if (jobDetails.style.display === 'none' || jobDetails.style.display === '') {
                     jobDetails.style.display = 'block';
                 }
-                let infohidden = jobDetails.querySelector('input[type="hidden"]');
+                let infohidden = document.getElementById('email_body_form_advertisements');
                 infohidden.value = button.parentElement.querySelector('input[name="ad_id"]').value;
             });
         });
